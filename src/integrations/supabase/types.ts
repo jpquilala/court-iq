@@ -14,7 +14,170 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      game_summaries: {
+        Row: {
+          created_at: string
+          game_id: string
+          id: string
+          improvements: string[] | null
+          next_focus: string | null
+          overview: string | null
+          strengths: string[] | null
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          game_id: string
+          id?: string
+          improvements?: string[] | null
+          next_focus?: string | null
+          overview?: string | null
+          strengths?: string[] | null
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          game_id?: string
+          id?: string
+          improvements?: string[] | null
+          next_focus?: string | null
+          overview?: string | null
+          strengths?: string[] | null
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_summaries_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: true
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      games: {
+        Row: {
+          blocks: number
+          court_name: string | null
+          created_at: string
+          game_date: string
+          game_time: string | null
+          game_type: string
+          id: string
+          location: string | null
+          minutes_played: number | null
+          notes: string | null
+          opponent_name: string | null
+          points: number
+          rebounds: number
+          shots_made: number
+          shots_taken: number
+          steals: number
+          turnovers: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blocks?: number
+          court_name?: string | null
+          created_at?: string
+          game_date: string
+          game_time?: string | null
+          game_type?: string
+          id?: string
+          location?: string | null
+          minutes_played?: number | null
+          notes?: string | null
+          opponent_name?: string | null
+          points?: number
+          rebounds?: number
+          shots_made?: number
+          shots_taken?: number
+          steals?: number
+          turnovers?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blocks?: number
+          court_name?: string | null
+          created_at?: string
+          game_date?: string
+          game_time?: string | null
+          game_type?: string
+          id?: string
+          location?: string | null
+          minutes_played?: number | null
+          notes?: string | null
+          opponent_name?: string | null
+          points?: number
+          rebounds?: number
+          shots_made?: number
+          shots_taken?: number
+          steals?: number
+          turnovers?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age: number | null
+          avatar_url: string | null
+          bio: string | null
+          city: string | null
+          created_at: string
+          dominant_hand: string | null
+          full_name: string | null
+          height_cm: number | null
+          id: string
+          nickname: string | null
+          onboarded: boolean
+          position: string | null
+          preferred_courts: string[] | null
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string
+          dominant_hand?: string | null
+          full_name?: string | null
+          height_cm?: number | null
+          id: string
+          nickname?: string | null
+          onboarded?: boolean
+          position?: string | null
+          preferred_courts?: string[] | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          age?: number | null
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string | null
+          created_at?: string
+          dominant_hand?: string | null
+          full_name?: string | null
+          height_cm?: number | null
+          id?: string
+          nickname?: string | null
+          onboarded?: boolean
+          position?: string | null
+          preferred_courts?: string[] | null
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
