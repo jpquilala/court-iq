@@ -37,13 +37,13 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#0c1018" },
-      { title: "Neighborhood Hoops — Track every run, know your game" },
+      { title: "Papawis Stats — Track every laro. Know your game." },
       {
         name: "description",
         content:
           "Premium stats tracker for open-run, pickup, and rec-league basketball players. Log games, track trends, get AI breakdowns.",
       },
-      { property: "og:title", content: "Neighborhood Hoops — Track every run" },
+      { property: "og:title", content: "Papawis Stats — Track every laro" },
       {
         property: "og:description",
         content:

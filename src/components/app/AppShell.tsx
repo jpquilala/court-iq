@@ -58,7 +58,7 @@ export function AppShell() {
         <Link to="/dashboard" className="flex items-center gap-2 px-5 py-5">
           <Logo />
           <span className="font-display text-lg font-bold">
-            Neighborhood<span className="text-primary">Hoops</span>
+            Papawis<span className="text-primary">Stats</span>
           </span>
         </Link>
 
@@ -109,7 +109,7 @@ export function AppShell() {
         <Link to="/dashboard" className="flex items-center gap-2">
           <Logo />
           <span className="font-display text-sm font-bold">
-            Neighborhood<span className="text-primary">Hoops</span>
+            Papawis<span className="text-primary">Stats</span>
           </span>
         </Link>
         <Link to="/settings" className="text-muted-foreground">

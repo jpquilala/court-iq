@@ -87,7 +87,7 @@ function OnboardingPage() {
         <div className="flex items-center gap-2">
           <Logo />
           <span className="font-display font-bold">
-            Neighborhood<span className="text-primary">Hoops</span>
+            Papawis<span className="text-primary">Stats</span>
           </span>
         </div>
 
