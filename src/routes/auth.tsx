@@ -53,7 +53,7 @@ function AuthPage() {
         <Link to="/" className="flex items-center gap-2 self-start">
           <Logo />
           <span className="font-display text-lg font-bold">
-            Neighborhood<span className="text-primary">Hoops</span>
+            Papawis<span className="text-primary">Stats</span>
           </span>
         </Link>
 

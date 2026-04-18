@@ -16,7 +16,7 @@ export function MarketingNav() {
         <Link to="/" className="flex items-center gap-2">
           <Logo />
           <span className="font-display text-lg font-bold tracking-tight">
-            Neighborhood<span className="text-primary">Hoops</span>
+            Papawis<span className="text-primary">Stats</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
