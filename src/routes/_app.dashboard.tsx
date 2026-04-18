@@ -291,7 +291,9 @@ function PointsTrend({ games }: { games: number[] }) {
   );
 }
 
-function Insights({ games }: { games: { points: number; turnovers: number; shots_made: number; shots_taken: number }[] }) {
+import type { GameStats } from "@/lib/stats";
+
+function Insights({ games }: { games: GameStats[] }) {
   if (games.length < 2) {
     return (
       <p className="text-sm text-muted-foreground">
