@@ -21,13 +21,13 @@ import { Logo, MarketingNav } from "@/components/marketing/MarketingNav";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Neighborhood Hoops — Track every run, know your game" },
+      { title: "Papawis Stats — Track every laro. Know your game." },
       {
         name: "description",
         content:
           "The premium stats tracker for open-run, pickup, and rec-league hoopers. Log games, see trends, get AI-powered breakdowns of every performance.",
       },
-      { property: "og:title", content: "Neighborhood Hoops — Track every run" },
+      { property: "og:title", content: "Papawis Stats — Track every laro" },
       {
         property: "og:description",
         content:
@@ -79,7 +79,7 @@ function Hero() {
           </div>
 
           <h1 className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
-            Track every run.{" "}
+            Track every laro.{" "}
             <span className="text-primary text-glow-blue">Know</span>{" "}
             your{" "}
             <span className="text-accent text-glow-orange">game.</span>
@@ -570,11 +570,11 @@ function Footer() {
         <div className="flex items-center gap-2">
           <Logo />
           <span className="font-display text-sm font-semibold">
-            Neighborhood Hoops
+            Papawis Stats
           </span>
         </div>
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Neighborhood Hoops · Built for the run.
+          © {new Date().getFullYear()} Papawis Stats · Built for the run.
         </p>
       </div>
     </footer>
