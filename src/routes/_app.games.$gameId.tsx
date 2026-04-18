@@ -30,7 +30,7 @@ import { Button } from "@/components/ui/button";
 import { generateAndSaveSummary } from "@/lib/summary";
 
 export const Route = createFileRoute("/_app/games/$gameId")({
-  head: () => ({ meta: [{ title: "Game detail — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Game detail — Papawis Stats" }] }),
   component: GameDetailPage,
 });
 
