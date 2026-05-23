@@ -13,13 +13,13 @@ import {
 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { aggregate, fmt, fmtPct, gameTypeLabel, efficiency } from "@/lib/stats";
 import { Button } from "@/components/ui/button";
 import { EmptyState, PageHeader, StatCard } from "@/components/app/AppShell";
 
 export const Route = createFileRoute("/_app/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — papawisstatsph" }] }),
   component: DashboardPage,
 });
 
@@ -31,11 +31,7 @@ function DashboardPage() {
     queryKey: ["profile", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId!)
-        .maybeSingle();
+      const { data } = await supabase.from("profiles").select("*").eq("id", userId!).maybeSingle();
       return data;
     },
   });
@@ -57,9 +53,7 @@ function DashboardPage() {
   const all = aggregate(games);
   const last5 = aggregate(games.slice(0, 5));
   const bestGame = [...games].sort((a, b) => b.points - a.points)[0];
-  const mostEfficient = [...games].sort(
-    (a, b) => efficiency(b) - efficiency(a),
-  )[0];
+  const mostEfficient = [...games].sort((a, b) => efficiency(b) - efficiency(a))[0];
 
   const greeting = profile?.nickname || profile?.full_name?.split(" ")[0] || "Hooper";
 
@@ -83,7 +77,12 @@ function DashboardPage() {
         <StatCard label="Games played" value={String(all.games)} glow="none" icon={Activity} />
         <StatCard label="Avg points" value={fmt(all.avgPoints)} glow="blue" icon={Target} />
         <StatCard label="FG%" value={fmtPct(all.fgPct)} glow="orange" />
-        <StatCard label="Efficiency" value={fmt(all.efficiency, 1)} glow="orange" icon={TrendingUp} />
+        <StatCard
+          label="Efficiency"
+          value={fmt(all.efficiency, 1)}
+          glow="orange"
+          icon={TrendingUp}
+        />
       </section>
 
       <section className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -98,16 +97,19 @@ function DashboardPage() {
         <div className="rounded-xl border border-border bg-card p-5 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="font-display text-lg font-bold">Recent form</h2>
-            <span className="font-mono text-xs text-muted-foreground">
-              Last 5 vs lifetime
-            </span>
+            <span className="font-mono text-xs text-muted-foreground">Last 5 vs lifetime</span>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <FormCompare label="PTS" recent={last5.avgPoints} lifetime={all.avgPoints} />
             <FormCompare label="REB" recent={last5.avgRebounds} lifetime={all.avgRebounds} />
             <FormCompare label="FG%" recent={last5.fgPct} lifetime={all.fgPct} suffix="%" />
           </div>
-          <PointsTrend games={games.slice(0, 10).map((g) => g.points).reverse()} />
+          <PointsTrend
+            games={games
+              .slice(0, 10)
+              .map((g) => g.points)
+              .reverse()}
+          />
         </div>
 
         <div className="rounded-xl border border-border bg-card p-5">
@@ -199,9 +201,7 @@ function DashboardPage() {
                       tiny
                       label="FG%"
                       value={
-                        g.shots_taken
-                          ? `${Math.round((g.shots_made / g.shots_taken) * 100)}`
-                          : "—"
+                        g.shots_taken ? `${Math.round((g.shots_made / g.shots_taken) * 100)}` : "—"
                       }
                       tone="orange"
                     />
@@ -251,19 +251,13 @@ function FormCompare({
 
 function PointsTrend({ games }: { games: number[] }) {
   if (games.length === 0) {
-    return (
-      <p className="mt-4 text-sm text-muted-foreground">
-        Add games to see your trend chart.
-      </p>
-    );
+    return <p className="mt-4 text-sm text-muted-foreground">Add games to see your trend chart.</p>;
   }
   const max = Math.max(...games, 1);
   const w = 320;
   const h = 80;
   const stepX = games.length > 1 ? w / (games.length - 1) : w;
-  const points = games
-    .map((p, i) => `${i * stepX},${h - (p / max) * (h - 10) - 5}`)
-    .join(" L");
+  const points = games.map((p, i) => `${i * stepX},${h - (p / max) * (h - 10) - 5}`).join(" L");
   return (
     <div className="mt-5 rounded-lg border border-border bg-background/40 p-4">
       <div className="flex items-center justify-between">
@@ -354,9 +348,7 @@ function Stat({
 }) {
   return (
     <div className="text-center">
-      <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </p>
+      <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">{label}</p>
       <p
         className={`stat-num font-display font-bold ${tiny ? "text-base" : "text-2xl"} ${
           tone === "blue" ? "text-primary" : "text-accent"
@@ -392,9 +384,7 @@ function RecordCard({
       <div className="flex items-center justify-between">
         <span
           className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
-            tone === "orange"
-              ? "bg-accent/10 text-accent"
-              : "bg-primary/10 text-primary"
+            tone === "orange" ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"
           }`}
         >
           <Icon className="h-3 w-3" />

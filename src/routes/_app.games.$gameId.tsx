@@ -1,22 +1,11 @@
 import * as React from "react";
-import {
-  createFileRoute,
-  Link,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  ArrowLeft,
-  Loader2,
-  Sparkles,
-  Trash2,
-  TrendingUp,
-  Trophy,
-} from "lucide-react";
+import { ArrowLeft, Loader2, Sparkles, Trash2, TrendingUp, Trophy } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import {
   aggregate,
   efficiency,
@@ -72,10 +61,7 @@ function GameDetailPage() {
     queryKey: ["games", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("games")
-        .select("*")
-        .eq("user_id", user!.id);
+      const { data } = await supabase.from("games").select("*").eq("user_id", user!.id);
       return data ?? [];
     },
   });
@@ -163,11 +149,7 @@ function GameDetailPage() {
         <Big label="STL" value={String(game.steals)} tone="orange" />
         <Big label="BLK" value={String(game.blocks)} tone="orange" />
         <Big label="TO" value={String(game.turnovers)} tone="orange" />
-        <Big
-          label="FG"
-          value={`${game.shots_made}/${game.shots_taken}`}
-          tone="blue"
-        />
+        <Big label="FG" value={`${game.shots_made}/${game.shots_taken}`} tone="blue" />
       </section>
 
       <section className="mt-3 grid grid-cols-3 gap-3">
@@ -205,9 +187,7 @@ function GameDetailPage() {
         ) : (
           <div className="space-y-5">
             {summary.overview && (
-              <p className="text-base leading-relaxed text-foreground/95">
-                {summary.overview}
-              </p>
+              <p className="text-base leading-relaxed text-foreground/95">{summary.overview}</p>
             )}
 
             {summary.strengths && summary.strengths.length > 0 && (
@@ -215,11 +195,7 @@ function GameDetailPage() {
             )}
 
             {summary.improvements && summary.improvements.length > 0 && (
-              <Block
-                title="Areas for improvement"
-                tone="orange"
-                items={summary.improvements}
-              />
+              <Block title="Areas for improvement" tone="orange" items={summary.improvements} />
             )}
 
             {summary.next_focus && (
@@ -227,9 +203,7 @@ function GameDetailPage() {
                 <p className="font-mono text-[10px] uppercase tracking-wider text-primary">
                   Suggested focus next game
                 </p>
-                <p className="mt-2 text-sm text-foreground/95">
-                  {summary.next_focus}
-                </p>
+                <p className="mt-2 text-sm text-foreground/95">{summary.next_focus}</p>
               </div>
             )}
           </div>
@@ -255,9 +229,7 @@ function GameDetailPage() {
       {game.notes && (
         <section className="mt-6 rounded-2xl border border-border bg-card p-5">
           <h2 className="mb-2 font-display text-lg font-bold">Notes</h2>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-            {game.notes}
-          </p>
+          <p className="text-sm text-muted-foreground whitespace-pre-wrap">{game.notes}</p>
         </section>
       )}
 
@@ -273,15 +245,7 @@ function GameDetailPage() {
   );
 }
 
-function Big({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone: "blue" | "orange";
-}) {
+function Big({ label, value, tone }: { label: string; value: string; tone: "blue" | "orange" }) {
   return (
     <div className="rounded-xl border border-border bg-card p-3 text-center md:p-4">
       <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -316,9 +280,7 @@ function Block({
       <ul className="mt-2 space-y-2">
         {items.map((s, i) => (
           <li key={i} className="flex items-start gap-3 text-sm text-foreground/95">
-            <span
-              className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${dotClass}`}
-            />
+            <span className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${dotClass}`} />
             {s}
           </li>
         ))}
@@ -327,15 +289,7 @@ function Block({
   );
 }
 
-function Compare({
-  label,
-  g,
-  avg,
-}: {
-  label: string;
-  g: number;
-  avg: number;
-}) {
+function Compare({ label, g, avg }: { label: string; g: number; avg: number }) {
   const diff = g - avg;
   const up = diff > 0.05;
   return (
@@ -347,8 +301,7 @@ function Compare({
       <p
         className={`mt-0.5 text-[11px] ${up ? "text-primary" : diff < -0.05 ? "text-destructive" : "text-muted-foreground"}`}
       >
-        {up ? "▲" : diff < -0.05 ? "▼" : "•"} {fmt(Math.abs(diff))} vs avg{" "}
-        {fmt(avg)}
+        {up ? "▲" : diff < -0.05 ? "▼" : "•"} {fmt(Math.abs(diff))} vs avg {fmt(avg)}
       </p>
     </div>
   );

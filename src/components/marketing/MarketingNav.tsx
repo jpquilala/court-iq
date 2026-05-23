@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { Activity, Sparkles } from "lucide-react";
 
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 
 /**

@@ -4,13 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import { MapPin, Pencil, User as UserIcon } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { aggregate, fmt, fmtPct } from "@/lib/stats";
 import { Button } from "@/components/ui/button";
 import { PageHeader, StatCard } from "@/components/app/AppShell";
 
 export const Route = createFileRoute("/_app/profile")({
-  head: () => ({ meta: [{ title: "Profile — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Profile — papawisstatsph" }] }),
   component: ProfilePage,
 });
 
@@ -21,11 +21,7 @@ function ProfilePage() {
     queryKey: ["profile", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", user!.id)
-        .maybeSingle();
+      const { data } = await supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle();
       return data;
     },
   });
@@ -84,9 +80,7 @@ function ProfilePage() {
         />
         <div className="relative flex flex-col gap-5 md:flex-row md:items-center">
           <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-neon text-2xl font-bold text-background glow-blue">
-            {(profile?.nickname || profile?.full_name || "?")
-              .slice(0, 1)
-              .toUpperCase()}
+            {(profile?.nickname || profile?.full_name || "?").slice(0, 1).toUpperCase()}
           </div>
           <div className="flex-1">
             <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">
@@ -105,9 +99,7 @@ function ProfilePage() {
               </p>
             )}
             {profile?.bio && (
-              <p className="mt-3 max-w-xl text-sm text-foreground/90">
-                {profile.bio}
-              </p>
+              <p className="mt-3 max-w-xl text-sm text-foreground/90">{profile.bio}</p>
             )}
           </div>
         </div>
@@ -143,9 +135,7 @@ function ProfilePage() {
                   <MapPin className="h-3.5 w-3.5 text-primary" />
                   <span className="font-medium">{c.court}</span>
                 </span>
-                <span className="font-mono text-xs text-muted-foreground">
-                  {c.count} games
-                </span>
+                <span className="font-mono text-xs text-muted-foreground">{c.count} games</span>
               </li>
             ))}
           </ul>

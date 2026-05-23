@@ -1,23 +1,15 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { aggregate, efficiency, fgPct, fmt, fmtPct, gameTypeLabel } from "@/lib/stats";
 import { EmptyState, PageHeader, StatCard } from "@/components/app/AppShell";
 
+const AnalyticsTrendChart = React.lazy(() => import("@/components/app/AnalyticsTrendChart"));
+
 export const Route = createFileRoute("/_app/analytics")({
-  head: () => ({ meta: [{ title: "Analytics — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Analytics — papawisstatsph" }] }),
   component: AnalyticsPage,
 });
 
@@ -67,6 +59,8 @@ function AnalyticsPage() {
     fg: g.shots_taken ? Math.round((g.shots_made / g.shots_taken) * 100) : 0,
     pps: g.shots_taken ? Number((g.points / g.shots_taken).toFixed(2)) : 0,
   }));
+
+  const selectedMetric = METRICS.find((m) => m.key === metric) ?? METRICS[0];
 
   // Performance by court
   const byCourt = React.useMemo(() => {
@@ -155,11 +149,7 @@ function AnalyticsPage() {
 
       {/* Form snapshot */}
       <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard
-          label="Lifetime PTS"
-          value={fmt(lifetime.avgPoints)}
-          glow="blue"
-        />
+        <StatCard label="Lifetime PTS" value={fmt(lifetime.avgPoints)} glow="blue" />
         <StatCard label="Lifetime FG%" value={fmtPct(lifetime.fgPct)} glow="orange" />
         <StatCard label="Last 5 PTS" value={fmt(last5.avgPoints)} glow="blue" />
         <StatCard label="Last 5 EFF" value={fmt(last5.efficiency)} glow="orange" />
@@ -177,8 +167,7 @@ function AnalyticsPage() {
                   : "bg-muted text-muted-foreground"
               }`}
             >
-              {streak.type === "hot" ? "🔥" : "❄️"} {streak.count}-game{" "}
-              {streak.type} streak
+              {streak.type === "hot" ? "🔥" : "❄️"} {streak.count}-game {streak.type} streak
             </span>
           )}
         </div>
@@ -200,56 +189,18 @@ function AnalyticsPage() {
         </div>
 
         <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 10, right: 16, bottom: 0, left: -8 }}>
-              <defs>
-                <linearGradient id="metric-grad" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0%" stopColor="oklch(0.78 0.18 230)" stopOpacity={0.5} />
-                  <stop offset="100%" stopColor="oklch(0.78 0.18 230)" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke="oklch(1 0 0 / 0.06)" vertical={false} />
-              <XAxis
-                dataKey="label"
-                stroke="oklch(0.68 0.025 250)"
-                fontSize={11}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="oklch(0.68 0.025 250)"
-                fontSize={11}
-                tickLine={false}
-                axisLine={false}
-                width={36}
-              />
-              <Tooltip
-                contentStyle={{
-                  background: "oklch(0.21 0.025 252)",
-                  border: "1px solid oklch(1 0 0 / 0.1)",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-                labelStyle={{ color: "oklch(0.97 0.01 250)" }}
-              />
-              <Area
-                type="monotone"
-                dataKey={metric}
-                stroke="oklch(0.78 0.18 230)"
-                strokeWidth={2.5}
-                fill="url(#metric-grad)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <React.Suspense
+            fallback={<div className="h-full w-full animate-pulse rounded-xl bg-background/40" />}
+          >
+            <AnalyticsTrendChart data={chartData} metric={metric} color={selectedMetric.color} />
+          </React.Suspense>
         </div>
       </section>
 
       {/* Performance by court */}
       <section className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h2 className="mb-4 font-display text-lg font-bold">
-            Performance by court
-          </h2>
+          <h2 className="mb-4 font-display text-lg font-bold">Performance by court</h2>
           {byCourt.length === 0 ? (
             <p className="text-sm text-muted-foreground">Add courts to see splits.</p>
           ) : (
@@ -275,9 +226,7 @@ function AnalyticsPage() {
         </div>
 
         <div className="rounded-2xl border border-border bg-card p-5">
-          <h2 className="mb-4 font-display text-lg font-bold">
-            Performance by game type
-          </h2>
+          <h2 className="mb-4 font-display text-lg font-bold">Performance by game type</h2>
           <ul className="space-y-2">
             {byType.map((t) => (
               <li

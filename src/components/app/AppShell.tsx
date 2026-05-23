@@ -12,9 +12,8 @@ import {
   Lightbulb,
 } from "lucide-react";
 
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { Logo } from "@/components/marketing/MarketingNav";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -173,16 +172,10 @@ export function PageHeader({
     <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div>
         {eyebrow && (
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">
-            {eyebrow}
-          </p>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">{eyebrow}</p>
         )}
-        <h1 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="mt-2 text-sm text-muted-foreground md:text-base">{subtitle}</p>
-        )}
+        <h1 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">{title}</h1>
+        {subtitle && <p className="mt-2 text-sm text-muted-foreground md:text-base">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
@@ -246,5 +239,3 @@ export function EmptyState({
     </div>
   );
 }
-
-export { Button };

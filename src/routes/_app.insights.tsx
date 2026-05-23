@@ -3,12 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Lightbulb, Sparkles } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { aggregate, efficiency, fmt, fmtPct } from "@/lib/stats";
 import { EmptyState, PageHeader } from "@/components/app/AppShell";
 
 export const Route = createFileRoute("/_app/insights")({
-  head: () => ({ meta: [{ title: "Insights — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Insights — papawisstatsph" }] }),
   component: InsightsPage,
 });
 
@@ -138,9 +138,7 @@ function generateInsights(
     STL: variance(games.map((g) => g.steals)),
     BLK: variance(games.map((g) => g.blocks)),
   };
-  const mostConsistent = Object.entries(variances).sort(
-    (a, b) => a[1] - b[1],
-  )[0][0];
+  const mostConsistent = Object.entries(variances).sort((a, b) => a[1] - b[1])[0][0];
   out.push({
     title: "Most consistent stat",
     body: `Your most consistent stat across all games is ${mostConsistent}.`,

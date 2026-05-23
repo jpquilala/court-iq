@@ -5,7 +5,7 @@ import { ArrowLeft, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,7 @@ import { GAME_TYPES, fmt, fmtPct } from "@/lib/stats";
 import { generateAndSaveSummary } from "@/lib/summary";
 
 export const Route = createFileRoute("/_app/games/new")({
-  head: () => ({ meta: [{ title: "Add game — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Add game — papawisstatsph" }] }),
   component: NewGamePage,
 });
 
@@ -62,9 +62,7 @@ function NewGamePage() {
     notes: "",
   });
 
-  const fg = form.shots_taken
-    ? (form.shots_made / form.shots_taken) * 100
-    : 0;
+  const fg = form.shots_taken ? (form.shots_made / form.shots_taken) * 100 : 0;
   const pps = form.shots_taken ? form.points / form.shots_taken : 0;
   const eff =
     form.points +
@@ -75,8 +73,7 @@ function NewGamePage() {
     Math.max(0, form.shots_taken - form.shots_made);
 
   function setNum(key: keyof typeof form) {
-    return (val: number) =>
-      setForm((f) => ({ ...f, [key]: Math.max(0, val) }));
+    return (val: number) => setForm((f) => ({ ...f, [key]: Math.max(0, val) }));
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -107,11 +104,7 @@ function NewGamePage() {
       notes: form.notes || null,
     };
 
-    const { data, error } = await supabase
-      .from("games")
-      .insert(insertRow)
-      .select("*")
-      .single();
+    const { data, error } = await supabase.from("games").insert(insertRow).select("*").single();
 
     if (error || !data) {
       setBusy(false);
@@ -138,9 +131,7 @@ function NewGamePage() {
       </button>
 
       <div className="mb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-accent">
-          Add game
-        </p>
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Add game</p>
         <h1 className="mt-2 font-display text-3xl font-bold tracking-tight md:text-4xl">
           Drop your stats.
         </h1>
@@ -237,43 +228,21 @@ function NewGamePage() {
             Box score
           </h2>
           <div className="grid grid-cols-3 gap-2 md:grid-cols-3">
-            <Stepper
-              label="PTS"
-              tone="blue"
-              value={form.points}
-              onChange={setNum("points")}
-            />
-            <Stepper
-              label="REB"
-              tone="blue"
-              value={form.rebounds}
-              onChange={setNum("rebounds")}
-            />
+            <Stepper label="PTS" tone="blue" value={form.points} onChange={setNum("points")} />
+            <Stepper label="REB" tone="blue" value={form.rebounds} onChange={setNum("rebounds")} />
             <Stepper
               label="TO"
               tone="orange"
               value={form.turnovers}
               onChange={setNum("turnovers")}
             />
-            <Stepper
-              label="STL"
-              tone="orange"
-              value={form.steals}
-              onChange={setNum("steals")}
-            />
-            <Stepper
-              label="BLK"
-              tone="orange"
-              value={form.blocks}
-              onChange={setNum("blocks")}
-            />
+            <Stepper label="STL" tone="orange" value={form.steals} onChange={setNum("steals")} />
+            <Stepper label="BLK" tone="orange" value={form.blocks} onChange={setNum("blocks")} />
             <Stepper
               label="MIN"
               tone="blue"
               value={Number(form.minutes_played) || 0}
-              onChange={(v) =>
-                setForm({ ...form, minutes_played: String(Math.max(0, v)) })
-              }
+              onChange={(v) => setForm({ ...form, minutes_played: String(Math.max(0, v)) })}
             />
           </div>
 
@@ -360,15 +329,7 @@ function NewGamePage() {
   );
 }
 
-function Field({
-  label,
-  id,
-  children,
-}: {
-  label: string;
-  id?: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, id, children }: { label: string; id?: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
@@ -427,15 +388,7 @@ function Stepper({
   );
 }
 
-function Calc({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone: "blue" | "orange";
-}) {
+function Calc({ label, value, tone }: { label: string; value: string; tone: "blue" | "orange" }) {
   return (
     <div className="text-center">
       <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">

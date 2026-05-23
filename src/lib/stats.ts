@@ -29,7 +29,7 @@ export function efficiency(g: GameStats): number {
   return g.points + g.rebounds + g.steals + g.blocks - g.turnovers - missed;
 }
 
-export function avg(nums: number[]): number {
+function avg(nums: number[]): number {
   if (nums.length === 0) return 0;
   return nums.reduce((a, b) => a + b, 0) / nums.length;
 }

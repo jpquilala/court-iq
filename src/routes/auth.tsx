@@ -5,7 +5,7 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Sign in — Neighborhood Hoops" },
+      { title: "Sign in — papawisstatsph" },
       { name: "description", content: "Sign in or create your free account." },
     ],
   }),
@@ -58,13 +58,7 @@ function AuthPage() {
         </Link>
 
         <div className="my-auto">
-          {mode === "forgot" ? (
-            <ForgotForm />
-          ) : mode === "signup" ? (
-            <SignUpForm />
-          ) : (
-            <SignInForm />
-          )}
+          {mode === "forgot" ? <ForgotForm /> : mode === "signup" ? <SignUpForm /> : <SignInForm />}
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
@@ -150,12 +144,14 @@ function SignInForm() {
             className="h-11 bg-background/40"
           />
         </div>
-        <Button
-          type="submit"
-          disabled={busy}
-          className="h-11 w-full text-base glow-blue"
-        >
-          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Sign in <ArrowRight className="ml-1 h-4 w-4" /></>}
+        <Button type="submit" disabled={busy} className="h-11 w-full text-base glow-blue">
+          {busy ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              Sign in <ArrowRight className="ml-1 h-4 w-4" />
+            </>
+          )}
         </Button>
 
         <p className="pt-2 text-center text-sm text-muted-foreground">
@@ -256,12 +252,14 @@ function SignUpForm() {
           />
           <p className="text-xs text-muted-foreground">At least 6 characters.</p>
         </div>
-        <Button
-          type="submit"
-          disabled={busy}
-          className="h-11 w-full text-base glow-blue"
-        >
-          {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Create account <ArrowRight className="ml-1 h-4 w-4" /></>}
+        <Button type="submit" disabled={busy} className="h-11 w-full text-base glow-blue">
+          {busy ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              Create account <ArrowRight className="ml-1 h-4 w-4" />
+            </>
+          )}
         </Button>
 
         <p className="pt-2 text-center text-sm text-muted-foreground">
@@ -300,10 +298,7 @@ function ForgotForm() {
   }
 
   return (
-    <FormShell
-      title="Reset password"
-      subtitle="We'll send a reset link to your email."
-    >
+    <FormShell title="Reset password" subtitle="We'll send a reset link to your email.">
       {sent ? (
         <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-sm text-foreground/90">
           Reset link sent. Check your email.

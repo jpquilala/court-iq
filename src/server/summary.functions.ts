@@ -38,8 +38,7 @@ const SUMMARY_TOOL = {
   type: "function",
   function: {
     name: "summarize_game",
-    description:
-      "Generate a basketball performance summary for a non-professional player.",
+    description: "Generate a basketball performance summary for a non-professional player.",
     parameters: {
       type: "object",
       properties: {
@@ -119,9 +118,7 @@ function ruleBasedFallback(g: InGame): SummaryResult {
 }
 
 export const generateGameSummary = createServerFn({ method: "POST" })
-  .inputValidator(
-    (input: { game: InGame; pastGames: PastGame[] }) => input,
-  )
+  .inputValidator((input: { game: InGame; pastGames: PastGame[] }) => input)
   .handler(async ({ data }) => {
     const { game, pastGames } = data;
     const apiKey = process.env.LOVABLE_API_KEY;
@@ -162,28 +159,25 @@ export const generateGameSummary = createServerFn({ method: "POST" })
         : "This is the player's first logged game.");
 
     try {
-      const res = await fetch(
-        "https://ai.gateway.lovable.dev/v1/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: userPrompt },
-            ],
-            tools: [SUMMARY_TOOL],
-            tool_choice: {
-              type: "function",
-              function: { name: "summarize_game" },
-            },
-          }),
+      const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          model: "google/gemini-3-flash-preview",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+          tools: [SUMMARY_TOOL],
+          tool_choice: {
+            type: "function",
+            function: { name: "summarize_game" },
+          },
+        }),
+      });
 
       if (!res.ok) {
         const text = await res.text();

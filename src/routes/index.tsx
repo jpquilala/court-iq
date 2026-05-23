@@ -30,8 +30,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Papawis Stats — Track every laro" },
       {
         property: "og:description",
-        content:
-          "Your stats. Your story. Your edge. Built for hoopers who play every weekend.",
+        content: "Your stats. Your story. Your edge. Built for hoopers who play every weekend.",
       },
     ],
   }),
@@ -79,16 +78,14 @@ function Hero() {
           </div>
 
           <h1 className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
-            Track every laro.{" "}
-            <span className="text-primary text-glow-blue">Know</span>{" "}
-            your{" "}
+            Track every laro. <span className="text-primary text-glow-blue">Know</span> your{" "}
             <span className="text-accent text-glow-orange">game.</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
-            The first stats platform built for pickup players, barangay leagues, and
-            weekend hoopers. Log every game, see your real progress, and get
-            AI-powered breakdowns of every performance.
+            The first stats platform built for pickup players, barangay leagues, and weekend
+            hoopers. Log every game, see your real progress, and get AI-powered breakdowns of every
+            performance.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -185,24 +182,18 @@ function HeroStatCard() {
           <div className="mt-5 rounded-lg border border-border bg-background/40 p-4">
             <div className="flex items-center justify-between">
               <p className="text-xs font-medium text-muted-foreground">FG%</p>
-              <p className="stat-num font-display font-bold text-foreground">
-                57.1%
-              </p>
+              <p className="stat-num font-display font-bold text-foreground">57.1%</p>
             </div>
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-gradient-neon"
-                style={{ width: "57%" }}
-              />
+              <div className="h-full rounded-full bg-gradient-neon" style={{ width: "57%" }} />
             </div>
           </div>
 
           <div className="mt-4 flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
             <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
             <p className="text-sm text-foreground/90 leading-snug">
-              <span className="font-semibold text-primary">Efficient night.</span>{" "}
-              Strong shot selection and high defensive impact — your best 3-game
-              stretch yet.
+              <span className="font-semibold text-primary">Efficient night.</span> Strong shot
+              selection and high defensive impact — your best 3-game stretch yet.
             </p>
           </div>
         </div>
@@ -212,14 +203,7 @@ function HeroStatCard() {
 }
 
 function SocialStrip() {
-  const items = [
-    "Open Runs",
-    "Pickup",
-    "Barangay Ball",
-    "Rec League",
-    "Tournaments",
-    "Scrimmages",
-  ];
+  const items = ["Open Runs", "Pickup", "Barangay Ball", "Rec League", "Tournaments", "Scrimmages"];
   return (
     <div className="border-y border-border/60 bg-background/40">
       <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-4 no-scrollbar md:justify-center md:gap-10 md:px-8">
@@ -227,10 +211,7 @@ function SocialStrip() {
           Built for
         </span>
         {items.map((i) => (
-          <span
-            key={i}
-            className="shrink-0 font-display text-sm font-semibold text-foreground/80"
-          >
+          <span key={i} className="shrink-0 font-display text-sm font-semibold text-foreground/80">
             {i}
           </span>
         ))}
@@ -291,8 +272,8 @@ function FeatureGrid() {
             <span className="text-accent text-glow-orange">real hoopers.</span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            No team subscriptions. No coaches required. Just you, your stats, and the
-            data that proves you're getting better.
+            No team subscriptions. No coaches required. Just you, your stats, and the data that
+            proves you're getting better.
           </p>
         </div>
 
@@ -304,17 +285,13 @@ function FeatureGrid() {
             >
               <div
                 className={`inline-flex h-11 w-11 items-center justify-center rounded-lg ${
-                  f.glow === "blue"
-                    ? "bg-primary/15 text-primary"
-                    : "bg-accent/15 text-accent"
+                  f.glow === "blue" ? "bg-primary/15 text-primary" : "bg-accent/15 text-accent"
                 }`}
               >
                 <f.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 font-display text-xl font-bold">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {f.body}
-              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
               <div
                 className={`pointer-events-none absolute inset-x-0 bottom-0 h-px ${
                   f.glow === "blue"
@@ -341,12 +318,11 @@ function DashboardPreview() {
             Built like a pro tool
           </p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
-            Your performance{" "}
-            <span className="text-primary text-glow-blue">operating system.</span>
+            Your performance <span className="text-primary text-glow-blue">operating system.</span>
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            A dashboard that feels like a serious analytics tool — but built for
-            everyday hoopers, not pros.
+            A dashboard that feels like a serious analytics tool — but built for everyday hoopers,
+            not pros.
           </p>
 
           <ul className="mt-8 space-y-4">
@@ -406,10 +382,7 @@ function DashboardMockup() {
             { l: "FG%", v: "48", c: "accent" },
             { l: "EFF", v: "+18", c: "accent" },
           ].map((k) => (
-            <div
-              key={k.l}
-              className="rounded-lg border border-border bg-background/40 p-3"
-            >
+            <div key={k.l} className="rounded-lg border border-border bg-background/40 p-3">
               <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
                 {k.l}
               </p>
@@ -427,9 +400,7 @@ function DashboardMockup() {
         {/* fake chart */}
         <div className="mt-5 rounded-lg border border-border bg-background/40 p-4">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-muted-foreground">
-              Points · last 10 games
-            </p>
+            <p className="text-xs font-semibold text-muted-foreground">Points · last 10 games</p>
             <p className="font-mono text-[10px] text-primary">+4.2 vs lifetime</p>
           </div>
           <svg viewBox="0 0 320 90" className="mt-3 h-24 w-full">
@@ -462,8 +433,8 @@ function DashboardMockup() {
         <div className="mt-4 flex items-start gap-3 rounded-lg border border-accent/30 bg-accent/5 p-3">
           <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
           <p className="text-sm leading-snug text-foreground/90">
-            <span className="font-semibold text-accent">AI insight.</span> You score
-            18% higher in evening games at Court 4. Lock in that schedule.
+            <span className="font-semibold text-accent">AI insight.</span> You score 18% higher in
+            evening games at Court 4. Lock in that schedule.
           </p>
         </div>
       </div>
@@ -490,9 +461,7 @@ function WhyItMatters() {
     <section id="why" className="relative py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-accent">
-            Why it matters
-          </p>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-accent">Why it matters</p>
           <h2 className="mt-3 font-display text-4xl font-bold tracking-tight md:text-5xl">
             Your stats. Your story. <br />
             <span className="text-primary text-glow-blue">Your edge.</span>
@@ -501,15 +470,10 @@ function WhyItMatters() {
 
         <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
           {points.map((p, i) => (
-            <div
-              key={p.h}
-              className="rounded-xl border border-border bg-card p-6 text-left"
-            >
+            <div key={p.h} className="rounded-xl border border-border bg-card p-6 text-left">
               <p className="font-mono text-xs text-primary">0{i + 1}</p>
               <h3 className="mt-3 font-display text-xl font-bold">{p.h}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {p.b}
-              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.b}</p>
             </div>
           ))}
         </div>
@@ -542,8 +506,7 @@ function FinalCTA() {
               into <span className="text-accent text-glow-orange">progress.</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-              Free to start. Built mobile-first. Designed for hoopers who actually
-              show up.
+              Free to start. Built mobile-first. Designed for hoopers who actually show up.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button asChild size="lg" className="h-12 px-7 text-base glow-blue">
@@ -569,9 +532,7 @@ function Footer() {
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-8">
         <div className="flex items-center gap-2">
           <Logo />
-          <span className="font-display text-sm font-semibold">
-            Papawis Stats
-          </span>
+          <span className="font-display text-sm font-semibold">Papawis Stats</span>
         </div>
         <p className="text-xs text-muted-foreground">
           © {new Date().getFullYear()} Papawis Stats · Built for the run.

@@ -4,12 +4,12 @@ import { Download, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/app/AppShell";
 
 export const Route = createFileRoute("/_app/settings")({
-  head: () => ({ meta: [{ title: "Settings — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Settings — papawisstatsph" }] }),
   component: SettingsPage,
 });
 
@@ -68,9 +68,7 @@ function SettingsPage() {
       g.turnovers,
       g.shots_made,
       g.shots_taken,
-      g.shots_taken
-        ? ((g.shots_made / g.shots_taken) * 100).toFixed(1)
-        : "",
+      g.shots_taken ? ((g.shots_made / g.shots_taken) * 100).toFixed(1) : "",
       (g.notes ?? "").replace(/[\n,]/g, " "),
     ]);
     const csv = [headers, ...rows]
@@ -122,7 +120,7 @@ function SettingsPage() {
         <section className="rounded-2xl border border-border bg-card p-5">
           <h2 className="font-display text-lg font-bold">About</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Neighborhood Hoops · Built for the run. v1.0
+            papawisstatsph · Built for the run. v1.0
           </p>
         </section>
       </div>

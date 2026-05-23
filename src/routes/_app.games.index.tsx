@@ -4,14 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Filter, PlusCircle, Search } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { GAME_TYPES, gameTypeLabel, fmtPct, efficiency } from "@/lib/stats";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState, PageHeader } from "@/components/app/AppShell";
 
 export const Route = createFileRoute("/_app/games/")({
-  head: () => ({ meta: [{ title: "Game history — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Game history — papawisstatsph" }] }),
   component: GameHistoryPage,
 });
 
@@ -83,10 +83,7 @@ function GameHistoryPage() {
         </div>
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
           <Filter className="h-4 w-4 shrink-0 text-muted-foreground" />
-          <button
-            onClick={() => setType("all")}
-            className={chip(type === "all")}
-          >
+          <button onClick={() => setType("all")} className={chip(type === "all")}>
             All
           </button>
           {GAME_TYPES.map((t) => (
@@ -127,10 +124,7 @@ function GameHistoryPage() {
       {isLoading ? (
         <div className="space-y-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-20 animate-pulse rounded-xl border border-border bg-card"
-            />
+            <div key={i} className="h-20 animate-pulse rounded-xl border border-border bg-card" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
@@ -163,9 +157,7 @@ function GameHistoryPage() {
       ) : (
         <ul className="space-y-2">
           {filtered.map((g) => {
-            const fg = g.shots_taken
-              ? (g.shots_made / g.shots_taken) * 100
-              : null;
+            const fg = g.shots_taken ? (g.shots_made / g.shots_taken) * 100 : null;
             return (
               <li key={g.id}>
                 <Link
@@ -192,11 +184,7 @@ function GameHistoryPage() {
                     <Mini label="REB" value={g.rebounds} tone="blue" />
                     <Mini label="STL" value={g.steals} tone="orange" />
                     <Mini label="BLK" value={g.blocks} tone="orange" />
-                    <Mini
-                      label="FG%"
-                      value={fg !== null ? Math.round(fg) : "—"}
-                      tone="orange"
-                    />
+                    <Mini label="FG%" value={fg !== null ? Math.round(fg) : "—"} tone="orange" />
                   </div>
                   <div className="flex flex-col items-end gap-1 md:hidden">
                     <p className="stat-num font-display text-2xl font-bold text-primary">
@@ -236,9 +224,7 @@ function Mini({
 }) {
   return (
     <div className="text-center">
-      <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">
-        {label}
-      </p>
+      <p className="font-mono text-[9px] uppercase tracking-wider text-muted-foreground">{label}</p>
       <p
         className={`stat-num font-display text-base font-bold ${
           tone === "blue" ? "text-primary" : "text-accent"

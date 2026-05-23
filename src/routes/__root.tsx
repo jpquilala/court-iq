@@ -10,9 +10,7 @@ function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-court px-4">
       <div className="max-w-md text-center">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">
-          Off the court
-        </p>
+        <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">Off the court</p>
         <h1 className="mt-4 text-7xl font-bold text-foreground text-glow-blue">404</h1>
         <h2 className="mt-2 text-xl font-semibold text-foreground">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">

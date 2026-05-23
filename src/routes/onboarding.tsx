@@ -4,14 +4,14 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/marketing/MarketingNav";
 
 export const Route = createFileRoute("/onboarding")({
-  head: () => ({ meta: [{ title: "Set up your profile — Neighborhood Hoops" }] }),
+  head: () => ({ meta: [{ title: "Set up your profile — papawisstatsph" }] }),
   component: OnboardingPage,
 });
 
@@ -92,15 +92,12 @@ function OnboardingPage() {
         </div>
 
         <div className="my-8">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">
-            Step 01
-          </p>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-primary">Step 01</p>
           <h1 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
             Build your player ID.
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            We'll personalize your dashboard and AI summaries. You can update this
-            anytime.
+            We'll personalize your dashboard and AI summaries. You can update this anytime.
           </p>
         </div>
 
@@ -159,9 +156,7 @@ function OnboardingPage() {
                   <button
                     type="button"
                     key={h}
-                    onClick={() =>
-                      setForm({ ...form, dominant_hand: active ? "" : h })
-                    }
+                    onClick={() => setForm({ ...form, dominant_hand: active ? "" : h })}
                     className={`h-10 flex-1 rounded-lg border text-sm font-bold transition ${
                       active
                         ? "border-accent bg-accent/10 text-accent glow-orange"
@@ -196,11 +191,7 @@ function OnboardingPage() {
             />
           </Field>
 
-          <Button
-            type="submit"
-            disabled={busy}
-            className="h-11 w-full text-base glow-blue"
-          >
+          <Button type="submit" disabled={busy} className="h-11 w-full text-base glow-blue">
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enter the gym"}
           </Button>
         </form>
@@ -209,15 +200,7 @@ function OnboardingPage() {
   );
 }
 
-function Field({
-  label,
-  id,
-  children,
-}: {
-  label: string;
-  id?: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, id, children }: { label: string; id?: string; children: React.ReactNode }) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
