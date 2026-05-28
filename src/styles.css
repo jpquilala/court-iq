@@ -52,7 +52,8 @@
   --color-neon-blue: var(--neon-blue);
   --color-neon-orange: var(--neon-orange);
   --color-court-line: var(--court-line);
-  --font-display: "Space Grotesk", "Inter Tight", system-ui, sans-serif;
+  --font-display:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 /* Dark by default — this is a night-court app. */

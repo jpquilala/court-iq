@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GAME_TYPES, fmt, fmtPct } from "@/lib/stats";
-import { generateAndSaveSummary } from "@/lib/summary";
 
 export const Route = createFileRoute("/_app/games/new")({
   head: () => ({ meta: [{ title: "Add game — papawisstatsph" }] }),
@@ -112,8 +111,12 @@ function NewGamePage() {
       return;
     }
 
-    // Fire-and-forget AI summary; don't block navigation
-    void generateAndSaveSummary(data);
+    // Fire-and-forget AI summary; don't block navigation. Keep this module lazy so
+    // the add-game route can load without eagerly pulling the server-function client runtime.
+    // If real AI generation fails, the detail page shows an explicit retry/error state.
+    void import("@/lib/summary")
+      .then(({ generateAndSaveSummary }) => generateAndSaveSummary(data))
+      .catch((error) => console.error("Initial AI breakdown generation failed:", error));
 
     qc.invalidateQueries({ queryKey: ["games"] });
     qc.invalidateQueries({ queryKey: ["recent-courts"] });

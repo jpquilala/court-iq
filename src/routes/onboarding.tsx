@@ -4,16 +4,27 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { AuthProvider } from "@/lib/auth";
 import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/marketing/MarketingNav";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({ meta: [{ title: "Set up your profile — papawisstatsph" }] }),
-  component: OnboardingPage,
+  component: OnboardingRoute,
 });
+
+function OnboardingRoute() {
+  return (
+    <AuthProvider>
+      <OnboardingPage />
+      <Toaster richColors theme="dark" position="top-center" />
+    </AuthProvider>
+  );
+}
 
 const POSITIONS = ["PG", "SG", "SF", "PF", "C"] as const;
 const HANDS = ["Right", "Left", "Both"] as const;

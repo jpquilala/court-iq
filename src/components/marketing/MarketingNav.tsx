@@ -2,14 +2,12 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { Activity, Sparkles } from "lucide-react";
 
-import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 
 /**
  * Top-bar logo + nav for public pages.
  */
 export function MarketingNav() {
-  const { user } = useAuth();
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-8">
@@ -31,22 +29,14 @@ export function MarketingNav() {
           </a>
         </nav>
         <div className="flex items-center gap-2">
-          {user ? (
-            <Button asChild size="sm" className="glow-blue">
-              <Link to="/dashboard">Open dashboard</Link>
-            </Button>
-          ) : (
-            <>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/auth">Sign in</Link>
-              </Button>
-              <Button asChild size="sm" className="glow-blue">
-                <Link to="/auth" search={{ mode: "signup" }}>
-                  Start tracking
-                </Link>
-              </Button>
-            </>
-          )}
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/auth">Sign in</Link>
+          </Button>
+          <Button asChild size="sm" className="glow-blue">
+            <Link to="/auth" search={{ mode: "signup" }}>
+              Start tracking
+            </Link>
+          </Button>
         </div>
       </div>
     </header>

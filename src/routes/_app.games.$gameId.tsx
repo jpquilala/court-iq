@@ -16,7 +16,6 @@ import {
   pointsPerShot,
 } from "@/lib/stats";
 import { Button } from "@/components/ui/button";
-import { generateAndSaveSummary } from "@/lib/summary";
 
 export const Route = createFileRoute("/_app/games/$gameId")({
   head: () => ({ meta: [{ title: "Game detail — Papawis Stats" }] }),
@@ -28,6 +27,8 @@ function GameDetailPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const [generationError, setGenerationError] = React.useState<string | null>(null);
+  const [isGeneratingSummary, setIsGeneratingSummary] = React.useState(false);
 
   const { data: game, isLoading } = useQuery({
     queryKey: ["game", gameId],
@@ -43,18 +44,23 @@ function GameDetailPage() {
     },
   });
 
-  const { data: summary, refetch: refetchSummary } = useQuery({
+  const {
+    data: summary,
+    isFetched: isSummaryFetched,
+    refetch: refetchSummary,
+  } = useQuery({
     queryKey: ["game-summary", gameId],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("game_summaries")
         .select("*")
         .eq("game_id", gameId)
         .maybeSingle();
+      if (error) throw error;
       return data;
     },
-    refetchInterval: (q) => (q.state.data ? false : 3000),
+    refetchInterval: (q) => (q.state.data || generationError ? false : 3000),
   });
 
   const { data: allGames = [] } = useQuery({
@@ -65,6 +71,28 @@ function GameDetailPage() {
       return data ?? [];
     },
   });
+
+  const generationStartedRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!user || !game || summary || !isSummaryFetched || generationStartedRef.current) return;
+
+    generationStartedRef.current = true;
+    setGenerationError(null);
+    setIsGeneratingSummary(true);
+
+    void import("@/lib/summary")
+      .then(({ generateAndSaveSummary }) => generateAndSaveSummary(game))
+      .then(() => refetchSummary())
+      .catch((error) => {
+        generationStartedRef.current = false;
+        const message = error instanceof Error ? error.message : "AI breakdown generation failed.";
+        console.error("Failed to generate missing AI breakdown:", error);
+        setGenerationError(message);
+        toast.error(message);
+      })
+      .finally(() => setIsGeneratingSummary(false));
+  }, [game, isSummaryFetched, refetchSummary, summary, user]);
 
   const lifetime = aggregate(allGames);
 
@@ -88,11 +116,25 @@ function GameDetailPage() {
     navigate({ to: "/games" });
   }
 
-  async function onRegenerate() {
-    if (!game) return;
-    toast.info("Re-generating breakdown…");
-    await generateAndSaveSummary(game);
-    refetchSummary();
+  async function onGenerateMissingSummary() {
+    if (!game || summary) return;
+    toast.info("Generating AI breakdown…");
+    setGenerationError(null);
+    setIsGeneratingSummary(true);
+
+    try {
+      const { generateAndSaveSummary } = await import("@/lib/summary");
+      await generateAndSaveSummary(game);
+      await refetchSummary();
+      toast.success("AI breakdown generated.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "AI breakdown generation failed.";
+      console.error("Failed to generate AI breakdown:", error);
+      setGenerationError(message);
+      toast.error(message);
+    } finally {
+      setIsGeneratingSummary(false);
+    }
   }
 
   return (
@@ -169,21 +211,31 @@ function GameDetailPage() {
             <Sparkles className="h-4 w-4 text-accent" />
             <h2 className="font-display text-lg font-bold">AI breakdown</h2>
           </div>
-          {summary && (
-            <button
-              onClick={onRegenerate}
-              className="text-xs text-muted-foreground hover:text-foreground"
-            >
-              Regenerate
-            </button>
-          )}
         </div>
 
         {!summary ? (
-          <div className="flex items-center gap-3 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin text-primary" />
-            Generating your breakdown…
-          </div>
+          generationError ? (
+            <div className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-foreground">
+              <p className="font-semibold text-destructive">AI breakdown was not generated.</p>
+              <p className="mt-2 text-muted-foreground">{generationError}</p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onGenerateMissingSummary}
+                disabled={isGeneratingSummary}
+                className="mt-4"
+              >
+                {isGeneratingSummary ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                Try real AI generation again
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+              Generating your AI breakdown…
+            </div>
+          )
         ) : (
           <div className="space-y-5">
             {summary.overview && (

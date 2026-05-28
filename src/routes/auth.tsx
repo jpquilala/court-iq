@@ -5,11 +5,13 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { AuthProvider } from "@/lib/auth";
 import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/marketing/MarketingNav";
+import { Toaster } from "@/components/ui/sonner";
 
 const searchSchema = z.object({
   mode: z.enum(["signin", "signup", "forgot"]).optional().default("signin"),
@@ -23,8 +25,17 @@ export const Route = createFileRoute("/auth")({
       { name: "description", content: "Sign in or create your free account." },
     ],
   }),
-  component: AuthPage,
+  component: AuthRoute,
 });
+
+function AuthRoute() {
+  return (
+    <AuthProvider>
+      <AuthPage />
+      <Toaster richColors theme="dark" position="top-center" />
+    </AuthProvider>
+  );
+}
 
 function AuthPage() {
   const { mode } = Route.useSearch();

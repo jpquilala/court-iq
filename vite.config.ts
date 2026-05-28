@@ -11,6 +11,13 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
+          if (
+            id.includes("clsx") ||
+            id.includes("tailwind-merge") ||
+            id.includes("class-variance-authority")
+          ) {
+            return "utils";
+          }
           if (id.includes("recharts") || id.includes("d3-")) return "charts";
           if (id.includes("@supabase")) return "supabase";
           if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
