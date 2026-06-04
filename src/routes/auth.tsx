@@ -1,15 +1,13 @@
 import * as React from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { AuthProvider } from "@/lib/auth";
 import { useAuth } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/marketing/MarketingNav";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -17,12 +15,37 @@ const searchSchema = z.object({
   mode: z.enum(["signin", "signup", "forgot"]).optional().default("signin"),
 });
 
+type OAuthProvider = "google" | "facebook";
+
+const providers: Array<{
+  id: OAuthProvider;
+  label: string;
+  eyebrow: string;
+  brandClass: string;
+}> = [
+  {
+    id: "google",
+    label: "Sign in with Google",
+    eyebrow: "G",
+    brandClass: "bg-white text-[#1f1f1f]",
+  },
+  {
+    id: "facebook",
+    label: "Sign in with Facebook",
+    eyebrow: "f",
+    brandClass: "bg-[#1877f2] text-white",
+  },
+];
+
 export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
       { title: "Sign in — papawisstatsph" },
-      { name: "description", content: "Sign in or create your free account." },
+      {
+        name: "description",
+        content: "Sign in to papawisstatsph with Google or Facebook.",
+      },
     ],
   }),
   component: AuthRoute,
@@ -38,7 +61,6 @@ function AuthRoute() {
 }
 
 function AuthPage() {
-  const { mode } = Route.useSearch();
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
@@ -69,7 +91,7 @@ function AuthPage() {
         </Link>
 
         <div className="my-auto">
-          {mode === "forgot" ? <ForgotForm /> : mode === "signup" ? <SignUpForm /> : <SignInForm />}
+          <OAuthCard />
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
@@ -80,263 +102,68 @@ function AuthPage() {
   );
 }
 
-function FormShell({
-  title,
-  subtitle,
-  children,
-}: {
-  title: string;
-  subtitle: string;
-  children: React.ReactNode;
-}) {
+function OAuthCard() {
+  const [busyProvider, setBusyProvider] = React.useState<OAuthProvider | null>(null);
+
+  async function signInWithProvider(provider: OAuthProvider) {
+    setBusyProvider(provider);
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+
+    if (error) {
+      setBusyProvider(null);
+      toast.error(error.message);
+    }
+  }
+
   return (
     <div className="neon-border rounded-2xl">
       <div className="rounded-2xl bg-card p-7">
-        <h1 className="font-display text-3xl font-bold tracking-tight">{title}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
-        <div className="mt-6">{children}</div>
+        <p className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
+          Fast court access
+        </p>
+        <h1 className="font-display text-3xl font-bold tracking-tight">Welcome to PapawisStats</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Use your social account to create or access your player dashboard. No password to
+          remember.
+        </p>
+
+        <div className="mt-7 space-y-3">
+          {providers.map((provider) => {
+            const isBusy = busyProvider === provider.id;
+            const isDisabled = busyProvider !== null;
+
+            return (
+              <Button
+                key={provider.id}
+                type="button"
+                variant="outline"
+                disabled={isDisabled}
+                onClick={() => void signInWithProvider(provider.id)}
+                className="h-12 w-full justify-start border-border/80 bg-background/50 px-4 text-base hover:bg-background/80"
+              >
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold ${provider.brandClass}`}
+                  aria-hidden
+                >
+                  {isBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : provider.eyebrow}
+                </span>
+                <span>{provider.label}</span>
+              </Button>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 rounded-xl border border-border/70 bg-background/30 p-4 text-xs leading-relaxed text-muted-foreground">
+          By continuing, you agree to use papawisstatsph responsibly and let the app store your
+          basketball profile, games, and stats securely.
+        </div>
       </div>
     </div>
-  );
-}
-
-function SignInForm() {
-  const navigate = useNavigate();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [busy, setBusy] = React.useState(false);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setBusy(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Welcome back.");
-    navigate({ to: "/dashboard" });
-  }
-
-  return (
-    <FormShell title="Welcome back" subtitle="Sign in to keep your streak alive.">
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="h-11 bg-background/40"
-          />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
-            <Link
-              to="/auth"
-              search={{ mode: "forgot" }}
-              className="text-xs text-primary hover:underline"
-            >
-              Forgot?
-            </Link>
-          </div>
-          <Input
-            id="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11 bg-background/40"
-          />
-        </div>
-        <Button type="submit" disabled={busy} className="h-11 w-full text-base glow-blue">
-          {busy ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <>
-              Sign in <ArrowRight className="ml-1 h-4 w-4" />
-            </>
-          )}
-        </Button>
-
-        <p className="pt-2 text-center text-sm text-muted-foreground">
-          New here?{" "}
-          <Link
-            to="/auth"
-            search={{ mode: "signup" }}
-            className="font-semibold text-primary hover:underline"
-          >
-            Create an account
-          </Link>
-        </p>
-      </form>
-    </FormShell>
-  );
-}
-
-function SignUpForm() {
-  const navigate = useNavigate();
-  const [fullName, setFullName] = React.useState("");
-  const [nickname, setNickname] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [busy, setBusy] = React.useState(false);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters.");
-      return;
-    }
-    setBusy(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: window.location.origin + "/dashboard",
-        data: { full_name: fullName, nickname },
-      },
-    });
-    setBusy(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Account created. Let's set up your profile.");
-    navigate({ to: "/onboarding" });
-  }
-
-  return (
-    <FormShell title="Start your stat sheet" subtitle="Free. 60 seconds. No team needed.">
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-2">
-            <Label htmlFor="full_name">Full name</Label>
-            <Input
-              id="full_name"
-              required
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="h-11 bg-background/40"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="nickname">Nickname</Label>
-            <Input
-              id="nickname"
-              placeholder='e.g. "Splash"'
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              className="h-11 bg-background/40"
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="h-11 bg-background/40"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            required
-            minLength={6}
-            autoComplete="new-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11 bg-background/40"
-          />
-          <p className="text-xs text-muted-foreground">At least 6 characters.</p>
-        </div>
-        <Button type="submit" disabled={busy} className="h-11 w-full text-base glow-blue">
-          {busy ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <>
-              Create account <ArrowRight className="ml-1 h-4 w-4" />
-            </>
-          )}
-        </Button>
-
-        <p className="pt-2 text-center text-sm text-muted-foreground">
-          Already on the team?{" "}
-          <Link
-            to="/auth"
-            search={{ mode: "signin" }}
-            className="font-semibold text-primary hover:underline"
-          >
-            Sign in
-          </Link>
-        </p>
-      </form>
-    </FormShell>
-  );
-}
-
-function ForgotForm() {
-  const [email, setEmail] = React.useState("");
-  const [busy, setBusy] = React.useState(false);
-  const [sent, setSent] = React.useState(false);
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setBusy(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + "/auth",
-    });
-    setBusy(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setSent(true);
-    toast.success("Check your email for a reset link.");
-  }
-
-  return (
-    <FormShell title="Reset password" subtitle="We'll send a reset link to your email.">
-      {sent ? (
-        <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 text-sm text-foreground/90">
-          Reset link sent. Check your email.
-        </div>
-      ) : (
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="h-11 bg-background/40"
-            />
-          </div>
-          <Button type="submit" disabled={busy} className="h-11 w-full glow-blue">
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : "Send reset link"}
-          </Button>
-        </form>
-      )}
-      <p className="mt-4 text-center text-sm text-muted-foreground">
-        <Link to="/auth" search={{ mode: "signin" }} className="text-primary hover:underline">
-          Back to sign in
-        </Link>
-      </p>
-    </FormShell>
   );
 }
