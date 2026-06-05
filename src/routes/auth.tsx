@@ -145,7 +145,7 @@ function OAuthCard() {
                 variant="outline"
                 disabled={isDisabled}
                 onClick={() => void signInWithProvider(provider.id)}
-                className="h-12 w-full justify-start border-border/80 bg-background/50 px-4 text-base hover:bg-background/80"
+                className="h-12 w-full justify-start border-border/80 bg-background/50 px-4 text-base text-foreground hover:bg-background/80 hover:text-foreground"
               >
                 <span
                   className={`flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold ${provider.brandClass}`}

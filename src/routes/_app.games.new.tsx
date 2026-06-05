@@ -179,7 +179,7 @@ function NewGamePage() {
               <Input
                 id="court_name"
                 list="recent-courts"
-                placeholder="e.g. Cubao Court 4"
+                placeholder="YMCA court"
                 value={form.court_name}
                 onChange={(e) => setForm({ ...form, court_name: e.target.value })}
                 className="h-11 bg-background/40"
@@ -193,7 +193,7 @@ function NewGamePage() {
             <Field label="Location / city" id="location">
               <Input
                 id="location"
-                placeholder="QC, NYC..."
+                placeholder="San Pablo City, Laguna"
                 value={form.location}
                 onChange={(e) => setForm({ ...form, location: e.target.value })}
                 className="h-11 bg-background/40"

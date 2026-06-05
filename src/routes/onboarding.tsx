@@ -184,7 +184,7 @@ function OnboardingPage() {
           <Field label="Home city / area" id="city">
             <Input
               id="city"
-              placeholder="Quezon City, NYC, Berlin..."
+              placeholder="San Pablo City, Laguna"
               value={form.city}
               onChange={(e) => setForm({ ...form, city: e.target.value })}
               className="h-11 bg-background/40"
