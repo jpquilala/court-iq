@@ -125,7 +125,7 @@ function OAuthCard() {
     <div className="neon-border rounded-2xl">
       <div className="rounded-2xl bg-card p-7">
         <p className="mb-3 inline-flex rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-          Fast court access
+          Stat sheet access
         </p>
         <h1 className="font-display text-3xl font-bold tracking-tight">Welcome to PapawisStats</h1>
         <p className="mt-2 text-sm text-muted-foreground">
