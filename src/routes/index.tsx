@@ -21,16 +21,17 @@ import { Logo, MarketingNav } from "@/components/marketing/MarketingNav";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Papawis Stats — Track every laro. Know your game." },
+      { title: "Papawis Stats — Bawat laro, may resibo." },
       {
         name: "description",
         content:
-          "The premium stats tracker for open-run, pickup, and rec-league hoopers. Log games, see trends, get AI-powered breakdowns of every performance.",
+          "Track your pickup games, barangay runs, and weekend leagues. Log every stat, see your progress, and get AI-powered breakdowns after every performance.",
       },
-      { property: "og:title", content: "Papawis Stats — Track every laro" },
+      { property: "og:title", content: "Papawis Stats — Bawat laro, may resibo" },
       {
         property: "og:description",
-        content: "Your stats. Your story. Your edge. Built for hoopers who play every weekend.",
+        content:
+          "Track your pickup games, barangay runs, and weekend leagues. Log every stat, see your progress, and get AI-powered breakdowns after every performance.",
       },
     ],
   }),
@@ -78,14 +79,13 @@ function Hero() {
           </div>
 
           <h1 className="mt-6 font-display text-5xl font-bold leading-[1.05] tracking-tight md:text-6xl lg:text-7xl">
-            Track every laro. <span className="text-primary text-glow-blue">Know</span> your{" "}
-            <span className="text-accent text-glow-orange">game.</span>
+            Bawat laro, <span className="text-primary text-glow-blue">may</span>{" "}
+            <span className="text-accent text-glow-orange">resibo.</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl">
-            The first stats platform built for pickup players, barangay leagues, and weekend
-            hoopers. Log every game, see your real progress, and get AI-powered breakdowns of every
-            performance.
+            Track your pickup games, barangay runs, and weekend leagues. Log every stat, see your
+            progress, and get AI-powered breakdowns after every performance.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
