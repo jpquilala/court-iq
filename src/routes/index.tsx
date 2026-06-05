@@ -146,7 +146,7 @@ function HeroStatCard() {
           <div className="flex items-start justify-between">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Sun · 8:30 PM · Cubao Court 4
+                Sun · 8:30 PM · YMCA Court
               </p>
               <p className="mt-1 font-display text-xl font-bold">Open Run</p>
             </div>
@@ -434,7 +434,7 @@ function DashboardMockup() {
           <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
           <p className="text-sm leading-snug text-foreground/90">
             <span className="font-semibold text-accent">AI insight.</span> You score 18% higher in
-            evening games at Court 4. Lock in that schedule.
+            evening games at YMCA Court. Lock in that schedule.
           </p>
         </div>
       </div>
